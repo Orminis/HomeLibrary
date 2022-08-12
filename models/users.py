@@ -11,9 +11,9 @@ class BasicUserModel(db.Model):
     username = db.Column(db.String(50), nullable=False, unique=True)
     first_name = db.Column(db.String(35), nullable=False)
     last_name = db.Column(db.String(35), nullable=False)
-    email = db.Column(db.Email(100), nullable=False, unique=True)
+    email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
-    created_on = db.Column(db.DateTime, server_default=func.now())
+    created_on = db.Column(db.DateTime, server_default=func.now(), nullable=False)
 
 
 # Minimal class for users in the system
