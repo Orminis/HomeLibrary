@@ -30,7 +30,7 @@ class CheckerModel(BasicUserModel):
     role = db.Column(db.Enum(UserRoles), default=UserRoles.checker, nullable=False)
 
 
-# Class for users who keep the system running and creates new admins or checkers
+# Class for users which create new admins or checkers and can delete books/updates
 class AdminModel(BasicUserModel):
     __tablename__ = "admin"
 
