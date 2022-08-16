@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 
 from managers.users import UserManager
-from schemas.request.auth import RegisterSchemaRequest
+from schemas.request.auth import RegisterSchemaRequest, LoginSchemaRequest
 from utils.decorators import validate_schema
 
 
@@ -15,6 +15,7 @@ class RegisterResource(Resource):
 
 
 class LoginResource(Resource):
+    @validate_schema(LoginSchemaRequest)
     def post(self):
         data = request.get_json()
         token = UserManager.login(data)

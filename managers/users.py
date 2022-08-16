@@ -18,10 +18,17 @@ class UserManager:
     @staticmethod
     def login(login_data):
         # login via (username or email) & password
-        login_set = {"username", "email"}
-        command = list(login_data.keys())[0]
-        if command in login_set:
-            login_user = StandardUserModel.query.filter_by(username=login_data[command]).first()
+        # login_set = {"username", "email"}
+        # command = list(login_data.keys())[0]
+        # if command in login_set:
+        #     login_user = StandardUserModel.query.filter_by(username=login_data[command]).first()
+        # if not login_user:
+        #     raise BadRequest("No such User! Please register")
+        # if check_password_hash(login_user.password, login_data["password"]):
+        #     return AuthManager.encode_token(login_user)
+        # raise BadRequest("Wrong credentials!")
+
+        login_user = StandardUserModel.query.filter_by(email=login_data["email"]).first()
         if not login_user:
             raise BadRequest("No such User! Please register")
         if check_password_hash(login_user.password, login_data["password"]):
