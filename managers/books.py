@@ -8,4 +8,4 @@ class ReadingBooksManager:
         book = ReadingBooksModel(**book_data)
         db.session.add(book)
         db.session.commit()
-        return {"book": book}
+        return "Book added for approval", 201

@@ -23,8 +23,8 @@ class ReadingBooksModel(BooksModel):
     original_language = db.Column(db.String(20), nullable=True)
     publish_language = db.Column(db.String(20), nullable=False)
     edition = db.Column(db.Integer, nullable=False)
-    paper_format_cover = db.Column(db.Enum(Covers), nullable=False)
-    digital_format = db.Column(db.String(20), nullable=True)
+    paper_format_cover = db.Column(db.Enum(Covers), nullable=True)
+    digital_format = db.Column(db.Boolean, unique=False, default=False, nullable=False)
 
 
 class AudioBooksModel(BooksModel):
