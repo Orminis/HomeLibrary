@@ -3,10 +3,11 @@ from db import db
 from models.enum import Covers, Status
 
 
-class BookModel(db.Model):
+class BooksModel(db.Model):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True)
+    # TODO to change name to title
     name = db.Column(db.String(255), nullable=False)
     author_first_name = db.Column(db.String(35), nullable=False)
     author_last_name = db.Column(db.String(35), nullable=False)
@@ -16,7 +17,7 @@ class BookModel(db.Model):
     comments = db.Column(db.Text, nullable=True)
 
 
-class ReadingBooksModel(BookModel):
+class ReadingBooksModel(BooksModel):
     __tablename__ = "reading_books"
 
     original_language = db.Column(db.String(20), nullable=True)
@@ -26,7 +27,7 @@ class ReadingBooksModel(BookModel):
     digital_format = db.Column(db.String(20), nullable=True)
 
 
-class AudioBookModel(BookModel):
+class AudioBooksModel(BooksModel):
     __tablename__ = "audio_books"
 
     reader_name = db.Column(db.String(100), nullable=False)
