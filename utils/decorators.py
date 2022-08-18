@@ -1,7 +1,7 @@
 from flask import request
 from werkzeug.exceptions import BadRequest, Forbidden
 
-from managers import auth
+from managers.auth import auth
 
 
 def validate_schema(schema_name):
@@ -22,7 +22,7 @@ def permission_required(role):
         def wrapper(*args, **kwargs):
             current_user = auth.current_user()
             if not current_user.role == role:
-                raise Forbidden("Gley si rabotata")
+                raise Forbidden("Permission denied!")
             return func(*args, **kwargs)
         return wrapper
     return decorated_function

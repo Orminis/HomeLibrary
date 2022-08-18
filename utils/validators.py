@@ -1,7 +1,6 @@
 from marshmallow import ValidationError
 from password_strength import PasswordPolicy
 
-
 # Определяне на условия за паролите чрез password_strength
 policy = PasswordPolicy.from_names(
     uppercase=1,  # need min. 1 uppercase letters
