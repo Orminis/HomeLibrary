@@ -21,4 +21,5 @@ class ReadingBookSchemaRequest(RegisterBookSchemaRequest):
     digital_format = fields.Bool()
 
 
-
+class AudioBookSchemaRequest(RegisterBookSchemaRequest):
+    reader_name = fields.Str(required=True, validate=validate.Length(min=5, max=100))

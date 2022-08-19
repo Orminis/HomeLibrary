@@ -13,7 +13,6 @@ class BooksModel(db.Model):
     author_last_name = db.Column(db.String(35), nullable=False)
     genre = db.Column(db.String(20), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    status = db.Column(db.Enum(Status), default=Status.pending, nullable=False)
     comments = db.Column(db.Text, nullable=True)
 
 
@@ -31,3 +30,21 @@ class AudioBooksModel(BooksModel):
     __tablename__ = "audio_books"
 
     reader_name = db.Column(db.String(100), nullable=False)
+
+
+class ReadingBooksForApprovalModel(BooksModel):
+    __tablename__ = "reading_books_for_approval"
+
+    original_language = db.Column(db.String(20), nullable=True)
+    publish_language = db.Column(db.String(20), nullable=False)
+    edition = db.Column(db.Integer, nullable=False)
+    paper_format_cover = db.Column(db.Enum(Covers), nullable=True)
+    digital_format = db.Column(db.Boolean, unique=False, default=False, nullable=False)
+    status = db.Column(db.Enum(Status), default=Status.pending, nullable=False)
+
+
+class AudioBooksForApprovalModel(BooksModel):
+    __tablename__ = "audio_books_for_approval"
+
+    reader_name = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.Enum(Status), default=Status.pending, nullable=False)
