@@ -39,7 +39,15 @@ class ReadingBooksForApprovalModel(BooksModel):
     publish_language = db.Column(db.String(20), nullable=False)
     edition = db.Column(db.Integer, nullable=False)
     paper_format_cover = db.Column(db.Enum(Covers), nullable=True)
-    digital_format = db.Column(db.Boolean, unique=False, default=False, nullable=False)
+    status = db.Column(db.Enum(Status), default=Status.pending, nullable=False)
+
+
+class DigitalBooksForApprovalModel(BooksModel):
+    __tablename__ = "digital_books_for_approval"
+
+    original_language = db.Column(db.String(20), nullable=True)
+    publish_language = db.Column(db.String(20), nullable=False)
+    edition = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Enum(Status), default=Status.pending, nullable=False)
 
 
