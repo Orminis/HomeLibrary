@@ -1,9 +1,10 @@
-from resources.auth import RegisterResource, LoginResource
+from resources.auth import RegisterResource, LoginResource, UpdateUserResource
 from resources.books import ReadingBooksResource, AudioBooksResource, DigitalBooksResource
 
 routes = (
-    (RegisterResource, "/register/"),
-    (LoginResource, "/login/"),
+    (RegisterResource, "/register_user/"),
+    (LoginResource, "/login_user/"),
+    (UpdateUserResource, "/update_user/"),
     (ReadingBooksResource, "/create_reading_book/"),
     (DigitalBooksResource, "/create_digital_book/"),
     (AudioBooksResource, "/create_audio_book/"),

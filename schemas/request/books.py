@@ -4,7 +4,7 @@ from utils.validators import validate_format_cover
 
 
 class RegisterBookSchemaRequest(Schema):
-    name = fields.Str(required=True, validate=validate.Length(min=2, max=255))
+    title = fields.Str(required=True, validate=validate.Length(min=2, max=255))
     author_first_name = fields.Str(required=True, validate=validate.Length(min=2, max=35))
     author_last_name = fields.Str(required=True, validate=validate.Length(min=2, max=35))
     genre = fields.Str(required=True, validate=validate.Length(min=2, max=20))
@@ -16,9 +16,8 @@ class ReadingBookSchemaRequest(RegisterBookSchemaRequest):
     original_language = fields.Str(allow_none=True, validate=validate.Length(min=2, max=20))
     publish_language = fields.Str(required=True, validate=validate.Length(min=2, max=20))
     edition = fields.Int(required=True)
-    paper_format_cover = fields.Str(allow_none=True, validate=validate.And(validate_format_cover,
-                                                                           validate.Length(min=4, max=4)))
-    digital_format = fields.Bool()
+    paper_format_cover = fields.Str(allow_none=True,
+                                    validate=validate.And(validate_format_cover, validate.Length(min=4, max=4)))
 
 
 class DigitalBooksSchemaRequest(RegisterBookSchemaRequest):

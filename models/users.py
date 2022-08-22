@@ -21,7 +21,14 @@ class StandardUserModel(BasicUserModel):
     __tablename__ = "standard_user"
 
     role = db.Column(db.Enum(UserRoles), default=UserRoles.user, nullable=False)
-
+    # relation between standard users and reading books bidirectional
+    reading_books = db.relationship("ReadingBooksModel",
+                                    secondary="UsersReadingBooksAssociations",
+                                    back_populates="users")
+    # relation between standard users and digital books bidirectional
+    digital_books = db.relationship("DigitalBooksModel",
+                                    secondary="UsersDigitalBooksAssociations",
+                                    back_populates="users")
 
 # Class for users who check new additions or editions of books in the system
 class CheckerModel(BasicUserModel):

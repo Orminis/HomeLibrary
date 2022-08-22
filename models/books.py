@@ -7,10 +7,7 @@ class BooksModel(db.Model):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True)
-    # TODO to change name to title
-    name = db.Column(db.String(255), nullable=False)
-    author_first_name = db.Column(db.String(35), nullable=False)
-    author_last_name = db.Column(db.String(35), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
     genre = db.Column(db.String(20), nullable=False)
     description = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Text, nullable=True)
@@ -23,13 +20,41 @@ class ReadingBooksModel(BooksModel):
     publish_language = db.Column(db.String(20), nullable=False)
     edition = db.Column(db.Integer, nullable=False)
     paper_format_cover = db.Column(db.Enum(Covers), nullable=True)
-    digital_format = db.Column(db.Boolean, unique=False, default=False, nullable=False)
+    # relation between standard users and reading books bidirectional
+    users = db.relationship("StandardUserModel",
+                            secondary="UsersReadingBooksAssociations",
+                            back_populates="reading_books")
+    # relation between author and books
+    author_id = db.Column(db.Integer, db.ForeignKey("authors.id"))
+    author = db.relationship("AuthorsModel", backref="reading_books")
+
+
+class DigitalBooksModel(BooksModel):
+    __tablename__ = "digital_books"
+
+    original_language = db.Column(db.String(20), nullable=True)
+    publish_language = db.Column(db.String(20), nullable=False)
+    edition = db.Column(db.Integer, nullable=False)
+    # relation between standard users and reading books bidirectional
+    users = db.relationship("StandardUserModel",
+                            secondary="UsersDigitalBooksAssociations",
+                            back_populates="digital_books")
+    # relation between author and books
+    author_id = db.Column(db.Integer, db.ForeignKey("authors.id"))
+    author = db.relationship("AuthorsModel", backref="digital_books")
 
 
 class AudioBooksModel(BooksModel):
     __tablename__ = "audio_books"
 
     reader_name = db.Column(db.String(100), nullable=False)
+    # relation between standard users and reading books bidirectional
+    users = db.relationship("StandardUserModel",
+                            secondary="UsersAudioBooksAssociations",
+                            back_populates="audio_books")
+    # relation between author and books
+    author_id = db.Column(db.Integer, db.ForeignKey("authors.id"))
+    author = db.relationship("AuthorsModel", backref="audio_books")
 
 
 class ReadingBooksForApprovalModel(BooksModel):

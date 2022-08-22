@@ -19,6 +19,7 @@ class DigitalBooksManager:
         db.session.commit()
         return "Digital book added for approval.", 201
 
+
 class AudioBooksManager:
     @staticmethod
     def create(audio_data):
