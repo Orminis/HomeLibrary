@@ -1,10 +1,11 @@
 from marshmallow import fields, validate, Schema
 
-from utils.validators import validate_format_cover
+from utils.validators import validate_format_cover, validate_name
 
 
 class RegisterBookSchemaRequest(Schema):
     title = fields.Str(required=True, validate=validate.Length(min=2, max=255))
+    author_name = fields.Str(required=True, validate=validate.And(validate_name, validate.Length(min=7, max=100)))
     genre = fields.Str(required=True, validate=validate.Length(min=2, max=20))
     description = fields.Raw(required=True)
     comments = fields.Raw(allow_none=True)

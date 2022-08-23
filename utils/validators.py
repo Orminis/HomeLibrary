@@ -28,3 +28,12 @@ def validate_format_cover(cover):
 def validate_isbn(isbn):
     if len(isbn) < 10 or len(isbn) > 13:
         raise ValidationError("Input correct ISBN!")
+
+
+def validate_name(name):
+    try:
+        first_name, last_name = name.split()
+    except ValueError:
+        raise ValidationError("Please input First and Last Names!")
+    if len(first_name) < 2 or len(last_name) < 2:
+        raise ValidationError("Each name should contain at least 2 characters!")

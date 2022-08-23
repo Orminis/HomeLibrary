@@ -8,6 +8,7 @@ class BooksModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
+    author_name = db.Column(db.String(100), nullable=False)
     genre = db.Column(db.String(20), nullable=False)
     description = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Text, nullable=True)
@@ -25,9 +26,6 @@ class ReadingBooksModel(BooksModel):
     users = db.relationship("StandardUserModel",
                             secondary="UsersReadingBooksAssociations",
                             back_populates="reading_books")
-    # relation between author and books
-    author_id = db.Column(db.Integer, db.ForeignKey("authors.id"))
-    author = db.relationship("AuthorsModel", backref="reading_books")
 
 
 class DigitalBooksModel(BooksModel):
@@ -40,9 +38,6 @@ class DigitalBooksModel(BooksModel):
     users = db.relationship("StandardUserModel",
                             secondary="UsersDigitalBooksAssociations",
                             back_populates="digital_books")
-    # relation between author and books
-    author_id = db.Column(db.Integer, db.ForeignKey("authors.id"))
-    author = db.relationship("AuthorsModel", backref="digital_books")
 
 
 class AudioBooksModel(BooksModel):
@@ -53,9 +48,6 @@ class AudioBooksModel(BooksModel):
     users = db.relationship("StandardUserModel",
                             secondary="UsersAudioBooksAssociations",
                             back_populates="audio_books")
-    # relation between author and books
-    author_id = db.Column(db.Integer, db.ForeignKey("authors.id"))
-    author = db.relationship("AuthorsModel", backref="audio_books")
 
 
 class ReadingBooksForApprovalModel(BooksModel):

@@ -30,6 +30,7 @@ class StandardUserModel(BasicUserModel):
                                     secondary="UsersDigitalBooksAssociations",
                                     back_populates="users")
 
+
 # Class for users who check new additions or editions of books in the system
 class CheckerModel(BasicUserModel):
     __tablename__ = "checker"
