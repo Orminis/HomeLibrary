@@ -27,3 +27,10 @@ class AudioBooksManager:
         db.session.add(audio_book)
         db.session.commit()
         return "Audio book added for approval.", 201
+
+
+class AcceptBookManager:
+    @staticmethod
+    # TODO Update of accepted books
+    def update(data):
+        pass

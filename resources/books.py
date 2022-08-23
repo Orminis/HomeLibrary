@@ -2,9 +2,10 @@ from flask import request
 from flask_restful import Resource
 
 from managers.auth import auth
-from managers.books import ReadingBooksManager, AudioBooksManager, DigitalBooksManager
+from managers.books import ReadingBooksManager, AudioBooksManager, DigitalBooksManager, AcceptBookManager
+from models import UserRoles
 from schemas.request.books import ReadingBookSchemaRequest, AudioBookSchemaRequest, DigitalBooksSchemaRequest
-from utils.decorators import validate_schema
+from utils.decorators import validate_schema, permission_required
 
 
 # Creating reading book resource
@@ -36,3 +37,13 @@ class AudioBooksResource(Resource):
         data = request.get_json()
         audio_book = AudioBooksManager.create(data)
         return {"audio_book": audio_book}
+
+
+class AcceptBooksResource(Resource):
+    @auth.login_required
+    @permission_required(UserRoles.checker)
+    def put(self):
+        data = request.get_json()
+        book = AcceptBookManager.update(data)
+        return None
+
