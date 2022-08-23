@@ -11,6 +11,7 @@ class BooksModel(db.Model):
     genre = db.Column(db.String(20), nullable=False)
     description = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Text, nullable=True)
+    isbn = db.Column(db.Integer, nullable=False)
 
 
 class ReadingBooksModel(BooksModel):

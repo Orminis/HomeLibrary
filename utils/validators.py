@@ -23,3 +23,8 @@ covers = {"soft": "Soft Cover", "hard": "Hard Cover"}
 def validate_format_cover(cover):
     if cover not in covers:
         raise ValidationError(f"Wrong cover!")
+
+
+def validate_isbn(isbn):
+    if len(isbn) < 10 or len(isbn) > 13:
+        raise ValidationError("Input correct ISBN!")

@@ -39,9 +39,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['standard_user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.add_column('audio_books_for_approval', sa.Column('status', sa.Enum('pending', 'approved', 'rejected', name='status'), nullable=False))
     op.drop_column('reading_books', 'digital_format')
-    op.add_column('reading_books_for_approval', sa.Column('status', sa.Enum('pending', 'approved', 'rejected', name='status'), nullable=False))
     # ### end Alembic commands ###
 
 

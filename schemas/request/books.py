@@ -5,11 +5,10 @@ from utils.validators import validate_format_cover
 
 class RegisterBookSchemaRequest(Schema):
     title = fields.Str(required=True, validate=validate.Length(min=2, max=255))
-    author_first_name = fields.Str(required=True, validate=validate.Length(min=2, max=35))
-    author_last_name = fields.Str(required=True, validate=validate.Length(min=2, max=35))
     genre = fields.Str(required=True, validate=validate.Length(min=2, max=20))
     description = fields.Raw(required=True)
     comments = fields.Raw(allow_none=True)
+    isbn = fields.Integer(required=True, validate=validate.Length(min=10, max=13))
 
 
 class ReadingBookSchemaRequest(RegisterBookSchemaRequest):
