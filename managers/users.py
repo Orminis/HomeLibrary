@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from db import db
 from managers.auth import AuthManager
 from models.users import StandardUserModel
-
+from models.association import *
 
 class UserManager:
     @staticmethod
