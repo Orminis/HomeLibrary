@@ -3,6 +3,7 @@ from sqlalchemy import func
 from models.enum import UserRoles
 from models.books import *
 
+
 class BasicUserModel(db.Model):
     __abstract__ = True
 
@@ -20,6 +21,7 @@ class StandardUserModel(BasicUserModel):
     __tablename__ = "standard_user"
 
     role = db.Column(db.Enum(UserRoles), default=UserRoles.user, nullable=False)
+
     # relation between standard users and reading books bidirectional
     reading_books = db.relationship("ReadingBooksModel",
                                     secondary=users_reading_books_associations_table,

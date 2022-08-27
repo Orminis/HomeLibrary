@@ -1,6 +1,6 @@
 from marshmallow import fields, validate, Schema
 
-from utils.validators import validate_format_cover, validate_name
+from utils.validators import validate_format_cover, validate_name, validate_isbn
 
 
 class RegisterBookSchemaRequest(Schema):
@@ -9,7 +9,7 @@ class RegisterBookSchemaRequest(Schema):
     genre = fields.Str(required=True, validate=validate.Length(min=2, max=20))
     description = fields.Raw(required=True)
     comments = fields.Raw(allow_none=True)
-    isbn = fields.Integer(required=True, validate=validate.Length(min=10, max=13))
+    isbn = fields.Integer(required=True, validate=validate_isbn)
 
 
 class ReadingBookSchemaRequest(RegisterBookSchemaRequest):

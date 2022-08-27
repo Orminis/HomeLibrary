@@ -1,18 +1,18 @@
+from sqlalchemy import update
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from db import db
 from managers.auth import AuthManager
-from models.users import StandardUserModel
-from models.association import *
+from models.users import StandardUserModel, CheckerModel, AdminModel
+from utils.validators import validate_existing_email, validate_existing_username
+
 
 class UserManager:
     @staticmethod
     def register(register_data):
-        existing_mail = StandardUserModel.query.filter_by(email=register_data["email"]).first()
-        existing_user = StandardUserModel.query.filter_by(username=register_data["username"]).first()
-        if existing_mail or existing_user:
-            raise BadRequest("Credentials already in use!")
+        validate_existing_email(register_data["email"])
+        validate_existing_username(register_data["username"])
         register_data["password"] = generate_password_hash(register_data["password"])
         user = StandardUserModel(**register_data)
         db.session.add(user)
@@ -21,7 +21,12 @@ class UserManager:
 
     @staticmethod
     def login(login_data):
+        # TODO make validator
         login_user = StandardUserModel.query.filter_by(email=login_data["email"]).first()
+        if not login_user:
+            login_user = CheckerModel.query.filter_by(email=login_data["email"]).first()
+            if not login_user:
+                login_user = AdminModel.query.filter_by(email=login_data["email"]).first()
         if not login_user:
             raise BadRequest("No such User! Please register")
         if check_password_hash(login_user.password, login_data["password"]):
@@ -40,5 +45,15 @@ class UserManager:
     # raise BadRequest("Wrong credentials!")
 
     @staticmethod
-    def update(update_data):
-        pass
+    def update(user_id, data):
+        upd_user = StandardUserModel.query.filter(StandardUserModel.id == user_id).first()
+        for k, v in data.items():
+            if k == "email":
+                validate_existing_email(data["email"])
+            if k == "username":
+                validate_existing_username(data["username"])
+            if k == "password":
+                v = generate_password_hash(v)
+            setattr(upd_user, k, v)
+        db.session.commit()
+        return upd_user

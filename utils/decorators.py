@@ -2,6 +2,7 @@ from flask import request
 from werkzeug.exceptions import BadRequest, Forbidden
 
 from managers.auth import auth
+from models import StandardUserModel
 
 
 def validate_schema(schema_name):
@@ -17,11 +18,13 @@ def validate_schema(schema_name):
     return decorated_function
 
 
-def permission_required(role):
+def permission_required(*roles):
     def decorated_function(func):
         def wrapper(*args, **kwargs):
-            current_user = auth.current_user()
-            if not current_user.role == role:
+            curr_user = StandardUserModel.query.filter_by(id=kwargs["user_id"]).first()
+            curr_role = curr_user.role
+            approved_roles = (role for role in roles)
+            if curr_role not in approved_roles:
                 raise Forbidden("Permission denied!")
             return func(*args, **kwargs)
         return wrapper
