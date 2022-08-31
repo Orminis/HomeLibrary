@@ -13,9 +13,9 @@ class Covers(Enum):
 
 
 class Status(Enum):
-    pending = "Pending"
-    approved = "Approved"
-    rejected = "Rejected"
+    pending = "pending"
+    approved = "approved"
+    rejected = "rejected"
 
 
 """

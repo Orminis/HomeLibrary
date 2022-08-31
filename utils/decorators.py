@@ -18,13 +18,13 @@ def validate_schema(schema_name):
     return decorated_function
 
 
+# decorator for permitted roles.
 def permission_required(*roles):
     def decorated_function(func):
         def wrapper(*args, **kwargs):
-            curr_user = StandardUserModel.query.filter_by(id=kwargs["user_id"]).first()
-            curr_role = curr_user.role
+            token_user = auth.current_user()
             approved_roles = (role for role in roles)
-            if curr_role not in approved_roles:
+            if token_user.role not in approved_roles:
                 raise Forbidden("Permission denied!")
             return func(*args, **kwargs)
         return wrapper

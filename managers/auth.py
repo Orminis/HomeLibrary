@@ -5,8 +5,7 @@ from decouple import config
 from flask_httpauth import HTTPTokenAuth
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from werkzeug.exceptions import Unauthorized
-
-from models import StandardUserModel
+from utils.validators import validate_login_user_via_id
 
 
 class AuthManager:
@@ -21,7 +20,7 @@ class AuthManager:
             raise Unauthorized("Missing token")
         try:
             payload = jwt.decode(token, key=config("SECRET_KEY"), algorithms=["HS256"])
-            return [payload["sub"], payload["role"]]
+            return payload["sub"]
         except ExpiredSignatureError:
             raise Unauthorized("Token expired")
         except InvalidTokenError:
@@ -35,8 +34,6 @@ auth = HTTPTokenAuth(scheme='Bearer')
 def verify_token(token):
     try:
         user = AuthManager.decode_token(token)
-        user_id, user_type = user[0], user[1]
-        # return StandardUserModel.query.filter_by(id=user_id).first()
-        return f"{user_type}.query.filter_by(id={user_id}).first()"
+        return validate_login_user_via_id(user)
     except Exception:
         raise Unauthorized("Invalid or missing token")

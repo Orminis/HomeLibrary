@@ -13,6 +13,14 @@ app.config.from_object("config.DevelopmentConfig")
 api = Api(app)
 migrate = Migrate(app, db)
 
+
+# commit all responses before sending it
+@app.after_request
+def return_response(resp):
+    db.session.commit()
+    return resp
+
+
 [api.add_resource(*route) for route in routes]
 
 if __name__ == "__main__":

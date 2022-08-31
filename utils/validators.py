@@ -1,11 +1,12 @@
 from marshmallow import ValidationError
 from password_strength import PasswordPolicy
 
+from werkzeug.exceptions import BadRequest, Forbidden
+
+from models import StandardUserModel, CheckerModel, AdminModel
+
+
 # Определяне на условия за паролите чрез password_strength
-from werkzeug.exceptions import BadRequest
-
-from models import StandardUserModel
-
 policy = PasswordPolicy.from_names(
     uppercase=2,  # need min. 1 uppercase letters
     numbers=1,  # need min. 1 digits
@@ -33,6 +34,11 @@ def validate_isbn(isbn):
         raise ValidationError("Input correct ISBN!")
 
 
+def validate_existing_isbn(isbn, table):
+    if table.query.filter_by(isbn=isbn).first():
+        raise BadRequest("Book is already in the system.")
+
+
 def validate_name(name):
     try:
         first_name, last_name = name.split()
@@ -51,3 +57,26 @@ def validate_existing_email(email):
 def validate_existing_username(username):
     if StandardUserModel.query.filter_by(username=username).first():
         raise BadRequest("Credentials already in use!")
+
+
+def validate_login_user(login_data):
+    login_user = StandardUserModel.query.filter_by(email=login_data["email"]).first()
+    if not login_user:
+        login_user = CheckerModel.query.filter_by(email=login_data["email"]).first()
+        if not login_user:
+            login_user = AdminModel.query.filter_by(email=login_data["email"]).first()
+    return login_user
+
+
+def validate_login_user_via_id(user):
+    login_user = StandardUserModel.query.filter_by(id=user).first()
+    if not login_user:
+        login_user = CheckerModel.query.filter_by(id=user).first()
+        if not login_user:
+            login_user = AdminModel.query.filter_by(id=user).first()
+    return login_user
+
+
+def validate_user_id_vs_token_id(token_user, user_id):
+    if not token_user.id == user_id:
+        raise Forbidden("Forbidden")
