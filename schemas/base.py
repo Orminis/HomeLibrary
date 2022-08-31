@@ -12,3 +12,4 @@ class BookBaseSchema(Schema):
     title = fields.Str(required=True, validate=validate.Length(min=2, max=255))
     author_name = fields.Str(required=True, validate=validate.And(validate_name, validate.Length(min=7, max=100)))
     isbn = fields.Integer(required=True, validate=validate_isbn)
+    cover = fields.Str(required=True)

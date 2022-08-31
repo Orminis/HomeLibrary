@@ -1,7 +1,7 @@
 from marshmallow import ValidationError
 from password_strength import PasswordPolicy
 
-from werkzeug.exceptions import BadRequest, Forbidden
+from werkzeug.exceptions import BadRequest, Forbidden, Locked
 
 from models import StandardUserModel, CheckerModel, AdminModel
 
@@ -80,3 +80,8 @@ def validate_login_user_via_id(user):
 def validate_user_id_vs_token_id(token_user, user_id):
     if not token_user.id == user_id:
         raise Forbidden("Forbidden")
+
+
+def validate_status_is_pending(status):
+    if not status == "pending":
+        raise Locked("Status already changed")

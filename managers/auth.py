@@ -11,7 +11,7 @@ from utils.validators import validate_login_user_via_id
 class AuthManager:
     @staticmethod
     def encode_token(user):
-        payload = {"sub": user.id, "role": user.role.name, "exp": datetime.utcnow() + timedelta(days=5), }
+        payload = {"sub": user.id, "exp": datetime.utcnow() + timedelta(days=5), }
         return jwt.encode(payload, key=config("SECRET_KEY"), algorithm="HS256")
 
     @staticmethod

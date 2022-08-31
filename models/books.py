@@ -22,10 +22,11 @@ class BooksModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     author_name = db.Column(db.String(100), nullable=False)
+    cover = db.Column(db.String(255), nullable=False)
     genre = db.Column(db.String(20), nullable=False)
     description = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Text, nullable=True)
-    isbn = db.Column(db.BigInteger, nullable=True, unique=True)
+    isbn = db.Column(db.BigInteger, nullable=False, unique=True)
 
 
 class ReadingBooksModel(BooksModel):

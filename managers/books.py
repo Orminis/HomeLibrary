@@ -2,7 +2,7 @@ from db import db
 from models import AudioBooksForApprovalModel, ReadingBooksForApprovalModel, DigitalBooksForApprovalModel, \
     ReadingBooksModel, StandardUserModel, DigitalBooksModel, AudioBooksModel, Status
 from schemas.responce.books import ReadingBooksSchemaResponse, DigitalBooksSchemaResponse, AudioBooksSchemaResponse
-from utils.validators import validate_existing_isbn
+from utils.validators import validate_existing_isbn, validate_status_is_pending
 
 
 class BooksManager:
@@ -26,7 +26,7 @@ class ReadingBooksManager:
             filter(StandardUserModel.id == user.id)
         return ReadingBooksSchemaResponse().dump(books, many=True)
 
-    # creates
+    # creates a book and put it in approval table for check by checker or admin
     @staticmethod
     def create(book_data):
         book = ReadingBooksForApprovalModel(**book_data)
@@ -42,19 +42,22 @@ class ReadingBooksManager:
     @staticmethod
     def approve(book_id):
         ReadingBooksForApprovalModel.query.filter_by(id=book_id).update({"status": Status.approved})
-
         book = ReadingBooksForApprovalModel.query.filter_by(id=book_id).first()
+        validate_existing_isbn(book.isbn, ReadingBooksModel)
+
         book_dict = dict((col, getattr(book, col)) for col in book.__table__.columns.keys())
-        # TODO Refactor this :(
         book_dict.pop("id")
         book_dict.pop("status")
+
         app_book = ReadingBooksModel(**book_dict)
         db.session.add(app_book)
         return app_book
 
     @staticmethod
     def reject(book_id):
-        ReadingBooksForApprovalModel.query.filter_by(id=book_id).update({"status": Status.rejected.name})
+        book = ReadingBooksForApprovalModel.query.filter_by(id=book_id).first()
+        validate_status_is_pending(book.status)
+        ReadingBooksForApprovalModel.query.filter_by(id=book_id).update({"status": Status.rejected})
         return 204
 
 

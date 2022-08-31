@@ -3,8 +3,9 @@ from flask_restful import Resource
 
 from managers.auth import auth
 from managers.users import UserManager
-from models import UserRoles, StandardUserModel
+from models import UserRoles, StandardUserModel, users_reading_books_associations_table, ReadingBooksModel
 from schemas.request.auth import RegisterSchemaRequest, LoginSchemaRequest, UpdateSchemaRequest
+from schemas.responce.books import ReadingBooksSchemaResponse
 from utils.decorators import validate_schema, permission_required
 
 
@@ -59,11 +60,19 @@ class DeleteUserResource(Resource):
         return {user: "deleted!"}, 410
 
 
+# TODO Nice return!!!
 class AddReadingBookToCollectionResource(Resource):
     @auth.login_required
     @permission_required(UserRoles.user)
     def put(self, book_id):
-        pass
+        book = UserManager.add_book_to_collection(book_id)
+        return ReadingBooksSchemaResponse().dump(book)
+
 
 class RemoveReadingBookFromCollectionResource(Resource):
-    pass
+    @auth.login_required
+    @permission_required(UserRoles.user)
+    def delete(self, book_id):
+        book = ReadingBooksModel.query.filter_by(id=book_id).first()
+        UserManager.remove_book_from_collection(book_id)
+        return ReadingBooksSchemaResponse().dump(book)

@@ -52,6 +52,7 @@ class UserManager:
         # If token id is different from given id raises Forbidden
         validate_user_id_vs_token_id(token_user, user_id)
         upd_user = StandardUserModel.query.filter(StandardUserModel.id == user_id).first()
+        cred_dict = {}
         for credentials, values in data.items():
             if credentials == "email":
                 validate_existing_email(data["email"])
@@ -59,7 +60,10 @@ class UserManager:
                 validate_existing_username(data["username"])
             if credentials == "password":
                 values = generate_password_hash(values)
-            setattr(upd_user, credentials, values)
+            cred_dict[credentials] = values
+        # if any of the credentials is in use we do not continue with checki
+        for k, v in cred_dict.items():
+            db.session.query(StandardUserModel).filter_by(id=upd_user.id).update({k: v})
         return ...
 
     # method to delete user account by user
@@ -74,6 +78,18 @@ class UserManager:
 
     # Add book to user's collection
     @staticmethod
-    def add_book_to_collection(user_id):
+    def add_book_to_collection(book_id):
         current_user = auth.current_user()
-        users_reading_books_associations_table
+        user = StandardUserModel.query.filter_by(id=current_user.id).first()
+        book = ReadingBooksModel.query.filter_by(id=book_id).first()
+        user.reading_books.append(book)
+        return 201
+
+    # Delete book from user's collection
+    @staticmethod
+    def remove_book_from_collection(book_id):
+        current_user = auth.current_user()
+        user = db.session.query(StandardUserModel).get(current_user.id)
+        book = ReadingBooksModel.query.filter_by(id=book_id).first()
+        user.reading_books.remove(book)
+        return ...

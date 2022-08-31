@@ -20,7 +20,7 @@ routes = (
 
     (ApproveReadingBookResource, "/reading_book/<int:id>/approve/"),
     (RejectReadingBookResource, "/reading_book/<int:id>/reject/"),
-    (AddReadingBookToCollectionResource, "/reading_book/<int:id>/add/"),
-    (RemoveReadingBookFromCollectionResource, "/reading_book/<int:id>/remove/")
+    (AddReadingBookToCollectionResource, "/reading_book/<int:book_id>/add/"),
+    (RemoveReadingBookFromCollectionResource, "/reading_book/<int:book_id>/remove/")
     # (UpdateStatusReadingBooksResource, "/update_status_reading_book/"),
 )
