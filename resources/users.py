@@ -48,7 +48,8 @@ class AddReadingBookToCollectionResource(Resource):
     @auth.login_required
     @permission_required(UserRoles.user)
     def put(self, book_id):
-        book = UserManager.add_book_to_collection(book_id)
+        book = ReadingBooksModel.query.filter_by(id=book_id).first()
+        UserManager.add_book_to_collection(book_id)
         return ReadingBooksSchemaResponse().dump(book), 201
 
 

@@ -5,6 +5,7 @@ from managers.auth import auth
 from managers.users import UserManager
 from models import UserRoles
 from schemas.request.auth import RegisterSchemaRequest, LoginSchemaRequest
+from schemas.responce.user import UserSchemaResponse
 from utils.decorators import validate_schema, permission_required
 
 
@@ -33,7 +34,7 @@ class DeleteUserResource(Resource):
     def delete(self, user_id):
         token_user = auth.current_user()
         user = UserManager.delete(token_user, user_id)
-        return {user: "deleted!"}, 202
+        return 202
 
 
 # Creation of checker (only by admin)
@@ -43,7 +44,7 @@ class CreateCheckerResource(Resource):
     def post(self):
         data = request.get_json()
         checker = UserManager.register_checker(data)
-        return {checker: "created"}, 200
+        return UserSchemaResponse().dump(checker), 200
 
 
 # Creation of admin (only by other admin)
@@ -53,4 +54,4 @@ class CreateAdminResource(Resource):
     def post(self):
         data = request.get_json()
         admin = UserManager.register_admin(data)
-        return {admin: "created"}, 200
+        return UserSchemaResponse().dump(admin), 200

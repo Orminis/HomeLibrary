@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class UserRoles(Enum):
-    user = "Standard User"
+    user = "User"
     checker = "Checker"
     admin = "Admin"
 

@@ -12,7 +12,7 @@ from utils.validators import validate_login_user_via_id
 class AuthManager:
     @staticmethod
     def encode_token(user):
-        payload = {"sub": user.id, "exp": datetime.utcnow() + timedelta(days=5)}
+        payload = {"sub": user.id, "role": user.role.name, "exp": datetime.utcnow() + timedelta(days=5)}
         return jwt.encode(payload, key=config("SECRET_KEY"), algorithm="HS256")
 
     @staticmethod
@@ -21,7 +21,7 @@ class AuthManager:
             raise Unauthorized("Missing token")
         try:
             payload = jwt.decode(token, key=config("SECRET_KEY"), algorithms=["HS256"])
-            return payload["sub"]
+            return [payload["sub"], payload["role"]]
         except ExpiredSignatureError:
             raise Unauthorized("Token expired")
         except InvalidTokenError:
@@ -34,5 +34,6 @@ auth = HTTPTokenAuth(scheme='Bearer')
 @auth.verify_token
 def verify_token(token):
     user = AuthManager.decode_token(token)
-    return validate_login_user_via_id(user)
+    user_id, role = user[0], user[1]
+    return validate_login_user_via_id(user_id, role)
 

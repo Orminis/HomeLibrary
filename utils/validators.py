@@ -76,12 +76,13 @@ def validate_login_user(login_data):
     return login_user
 
 
-def validate_login_user_via_id(user_id):
-    login_user = StandardUserModel.query.filter_by(id=user_id).first()
-    if not login_user:
+def validate_login_user_via_id(user_id, role):
+    if role == "user":
+        login_user = StandardUserModel.query.filter_by(id=user_id).first()
+    elif role == "checker":
         login_user = CheckerModel.query.filter_by(id=user_id).first()
-        if not login_user:
-            login_user = AdminModel.query.filter_by(id=user_id).first()
+    elif role == "admin":
+        login_user = AdminModel.query.filter_by(id=user_id).first()
     return login_user
 
 
@@ -91,5 +92,5 @@ def validate_user_id_vs_token_id(token_user, user_id):
 
 
 def validate_status_is_pending(status):
-    if not status == "pending":
+    if not status.name == "pending":
         raise Locked("Status already changed")

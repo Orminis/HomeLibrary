@@ -91,6 +91,8 @@ class UserManager:
         current_user = auth.current_user()
         user = StandardUserModel.query.filter_by(id=current_user.id).first()
         book = ReadingBooksModel.query.filter_by(id=book_id).first()
+        if not book:
+            raise ValueError("Missing book")
         user.reading_books.append(book)
         return 201
 
@@ -98,9 +100,8 @@ class UserManager:
     @staticmethod
     def remove_book_from_collection(book_id):
         current_user = auth.current_user()
-        user = db.session.query(StandardUserModel).get(current_user.id)
         book = ReadingBooksModel.query.filter_by(id=book_id).first()
-        user.reading_books.remove(book)
+        current_user.reading_books.remove(book)
         return ...
 
     # creating checker by admin
