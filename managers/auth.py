@@ -5,13 +5,14 @@ from decouple import config
 from flask_httpauth import HTTPTokenAuth
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from werkzeug.exceptions import Unauthorized
+
 from utils.validators import validate_login_user_via_id
 
 
 class AuthManager:
     @staticmethod
     def encode_token(user):
-        payload = {"sub": user.id, "exp": datetime.utcnow() + timedelta(days=5), }
+        payload = {"sub": user.id, "exp": datetime.utcnow() + timedelta(days=5)}
         return jwt.encode(payload, key=config("SECRET_KEY"), algorithm="HS256")
 
     @staticmethod
@@ -32,8 +33,6 @@ auth = HTTPTokenAuth(scheme='Bearer')
 
 @auth.verify_token
 def verify_token(token):
-    try:
-        user = AuthManager.decode_token(token)
-        return validate_login_user_via_id(user)
-    except Exception:
-        raise Unauthorized("Invalid or missing token")
+    user = AuthManager.decode_token(token)
+    return validate_login_user_via_id(user)
+

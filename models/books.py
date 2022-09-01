@@ -22,7 +22,7 @@ class BooksModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     author_name = db.Column(db.String(100), nullable=False)
-    cover = db.Column(db.String(255), nullable=False)
+    cover_photo_url = db.Column(db.String(255), nullable=False)
     genre = db.Column(db.String(20), nullable=False)
     description = db.Column(db.Text, nullable=False)
     comments = db.Column(db.Text, nullable=True)

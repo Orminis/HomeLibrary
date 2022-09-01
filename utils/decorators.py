@@ -2,7 +2,6 @@ from flask import request
 from werkzeug.exceptions import BadRequest, Forbidden
 
 from managers.auth import auth
-from models import StandardUserModel
 
 
 def validate_schema(schema_name):

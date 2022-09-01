@@ -1,7 +1,7 @@
 from sqlalchemy import func
 
-from models.enum import UserRoles
 from models.books import *
+from models.enum import UserRoles
 
 
 class BasicUserModel(db.Model):

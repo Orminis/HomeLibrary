@@ -1,10 +1,10 @@
-from resources.auth import UpdateUserResource, PersonalUserResource, \
-    DeleteUserResource, RegisterUserResource, LoginUserResource, AddReadingBookToCollectionResource, \
-    RemoveReadingBookFromCollectionResource
-from resources.books import ReadingBooksResource, AudioBooksResource, DigitalBooksResource, BooksResource, \
-    RejectReadingBookResource, ApproveReadingBookResource
+from resources.auth import DeleteUserResource, RegisterUserResource, LoginUserResource
 
-# UpdateStatusReadingBooksResource
+from resources.books import AudioBooksResource, DigitalBooksResource, BooksResource, \
+    RejectReadingBookResource, ApproveReadingBookResource, ReadingBooksResource, DeleteReadingBooksResource
+
+from resources.users import AddReadingBookToCollectionResource, RemoveReadingBookFromCollectionResource, \
+    PersonalUserResource, UserReadingBooksResource, UpdateUserResource
 
 routes = (
     (PersonalUserResource, "/<int:user_id>/"),
@@ -12,15 +12,17 @@ routes = (
     (LoginUserResource, "/login_user/"),
     (UpdateUserResource, "/<int:user_id>/update_user/"),
     (DeleteUserResource, "/<int:user_id>/delete_user/"),
+    (UserReadingBooksResource, "/<int:user_id>/reading_book/"),
 
     (BooksResource, "/books/"),
-    (ReadingBooksResource, "/reading_book/"),
-    (DigitalBooksResource, "/digital_book/"),
-    (AudioBooksResource, "/audio_book/"),
 
+    (ReadingBooksResource, "/reading_books"),
     (ApproveReadingBookResource, "/reading_book/<int:id>/approve/"),
     (RejectReadingBookResource, "/reading_book/<int:id>/reject/"),
+    (DeleteReadingBooksResource, "/<int:book_id>/delete/"),
     (AddReadingBookToCollectionResource, "/reading_book/<int:book_id>/add/"),
-    (RemoveReadingBookFromCollectionResource, "/reading_book/<int:book_id>/remove/")
-    # (UpdateStatusReadingBooksResource, "/update_status_reading_book/"),
+    (RemoveReadingBookFromCollectionResource, "/reading_book/<int:book_id>/remove/"),
+
+    (DigitalBooksResource, "/digital_books/"),
+    (AudioBooksResource, "/audio_books/"),
 )

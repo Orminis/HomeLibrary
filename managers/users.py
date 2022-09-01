@@ -1,10 +1,10 @@
-from werkzeug.exceptions import BadRequest, Forbidden
+from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from db import db
 from managers.auth import AuthManager, auth
 from models import ReadingBooksModel, DigitalBooksModel, AudioBooksModel
-from models.users import StandardUserModel, CheckerModel, AdminModel
+from models.users import StandardUserModel
 from schemas.responce.books import ReadingBooksSchemaResponse, DigitalBooksSchemaResponse, AudioBooksSchemaResponse
 from schemas.responce.user import UserSchemaResponse
 from utils.validators import validate_existing_email, validate_existing_username, validate_login_user, \
@@ -12,6 +12,7 @@ from utils.validators import validate_existing_email, validate_existing_username
 
 
 class UserManager:
+    # Return user data and a full book collection
     @staticmethod
     def get_user(token_user, user_id):
         # If token id is different from given id raises Forbidden
@@ -34,6 +35,7 @@ class UserManager:
         register_data["password"] = generate_password_hash(register_data["password"])
         user = StandardUserModel(**register_data)
         db.session.add(user)
+        db.session.flush()
         return AuthManager.encode_token(user)
 
     @staticmethod
@@ -46,7 +48,7 @@ class UserManager:
             return AuthManager.encode_token(login_user)
         raise BadRequest("Wrong credentials!")
 
-    # Update user credentials
+    # Self Update of user's credentials
     @staticmethod
     def update(data, token_user, user_id):
         # If token id is different from given id raises Forbidden
@@ -76,7 +78,14 @@ class UserManager:
         db.session.delete(del_user)
         return "User deleted!"
 
-    # Add book to user's collection
+    # returns user's collection of reading books
+    @staticmethod
+    def get_reading_books(user):
+        books = ReadingBooksModel.query.join(StandardUserModel, ReadingBooksModel.users). \
+            filter(StandardUserModel.id == user.id)
+        return ReadingBooksSchemaResponse().dump(books, many=True)
+
+    # Add reading book to user's collection
     @staticmethod
     def add_book_to_collection(book_id):
         current_user = auth.current_user()
@@ -85,7 +94,7 @@ class UserManager:
         user.reading_books.append(book)
         return 201
 
-    # Delete book from user's collection
+    # Delete reading book from user's collection
     @staticmethod
     def remove_book_from_collection(book_id):
         current_user = auth.current_user()

@@ -12,18 +12,16 @@ from utils.decorators import validate_schema, permission_required
 class BooksResource(Resource):
     @auth.login_required
     def get(self):
-        books = BooksManager.get()
-        return books
+        books = BooksManager.get_all()
+        return books, 200
 
 
 class ReadingBooksResource(Resource):
-    # Returns user's reading book collection
+    # Returns reading book collection
     @auth.login_required
-    @permission_required(UserRoles.user)
     def get(self):
-        token_user = auth.current_user()
-        books = ReadingBooksManager.get_books(token_user)
-        return books
+        books = ReadingBooksManager.get_books()
+        return books, 200
 
     # Creating reading book resource
     @auth.login_required
@@ -41,6 +39,15 @@ class ReadingBooksResource(Resource):
 #         data = request.get_json()
 #         book = ReadingBooksManager.update(data)
 #         return book
+
+
+class DeleteReadingBooksResource(Resource):
+    # Delete a reading book
+    @auth.login_required
+    @permission_required(UserRoles.admin)
+    def delete(self, book_id):
+        book = ReadingBooksManager.delete(book_id)
+        return {book: "deleted!"}, 200
 
 
 # Creating digital book resource
@@ -76,4 +83,4 @@ class RejectReadingBookResource(Resource):
     @permission_required(UserRoles.checker, UserRoles.admin)
     def put(self, id):
         ReadingBooksManager.reject(id)
-        return 204
+        return 202

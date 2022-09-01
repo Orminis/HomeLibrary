@@ -1,13 +1,16 @@
+from marshmallow import fields
+
 from schemas.base import BookBaseSchema
 
 
 class ReadingBooksSchemaResponse(BookBaseSchema):
-    pass
+    photo_url = fields.Str(required=True)
 
 
 class DigitalBooksSchemaResponse(BookBaseSchema):
-    pass
+    photo_url = fields.Str(required=True)
 
 
 class AudioBooksSchemaResponse(BookBaseSchema):
-    pass
+    photo_url = fields.Str(required=True)
+

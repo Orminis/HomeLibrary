@@ -1,10 +1,8 @@
 from marshmallow import ValidationError
 from password_strength import PasswordPolicy
-
 from werkzeug.exceptions import BadRequest, Forbidden, Locked
 
 from models import StandardUserModel, CheckerModel, AdminModel
-
 
 # Определяне на условия за паролите чрез password_strength
 policy = PasswordPolicy.from_names(
@@ -68,12 +66,12 @@ def validate_login_user(login_data):
     return login_user
 
 
-def validate_login_user_via_id(user):
-    login_user = StandardUserModel.query.filter_by(id=user).first()
+def validate_login_user_via_id(user_id):
+    login_user = StandardUserModel.query.filter_by(id=user_id).first()
     if not login_user:
-        login_user = CheckerModel.query.filter_by(id=user).first()
+        login_user = CheckerModel.query.filter_by(id=user_id).first()
         if not login_user:
-            login_user = AdminModel.query.filter_by(id=user).first()
+            login_user = AdminModel.query.filter_by(id=user_id).first()
     return login_user
 
 

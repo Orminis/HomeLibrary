@@ -1,13 +1,15 @@
 from marshmallow import fields, validate
 
 from schemas.base import BookBaseSchema
-from utils.validators import validate_format_cover, validate_name, validate_isbn
+from utils.validators import validate_format_cover
 
 
 class RegisterBookSchemaRequest(BookBaseSchema):
     genre = fields.Str(required=True, validate=validate.Length(min=2, max=20))
     description = fields.Raw(required=True)
     comments = fields.Raw(allow_none=True)
+    cover_photo = fields.Str(required=True)
+    extension = fields.Str(required=True)
 
 
 class ReadingBookSchemaRequest(RegisterBookSchemaRequest):
