@@ -46,6 +46,7 @@ class CreateCheckerResource(Resource):
         return {checker: "created"}, 200
 
 
+# Creation of admin (only by other admin)
 class CreateAdminResource(Resource):
     @auth.login_required
     @permission_required(UserRoles.admin)

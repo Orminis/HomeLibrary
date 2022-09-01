@@ -4,7 +4,7 @@ import uuid
 from common import TEMP_DIR
 from db import db
 from models import ReadingBooksModel, DigitalBooksModel, AudioBooksModel, ReadingBooksForApprovalModel, Status, \
-    DigitalBooksForApprovalModel, AudioBooksForApprovalModel, UserRoles
+    DigitalBooksForApprovalModel, AudioBooksForApprovalModel
 from schemas.responce.books import ReadingBooksSchemaResponse, DigitalBooksSchemaResponse, AudioBooksSchemaResponse
 from services.s3 import S3Service
 from utils.base import decode_file

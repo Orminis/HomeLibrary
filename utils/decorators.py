@@ -13,7 +13,9 @@ def validate_schema(schema_name):
             if not errors:
                 return func(*args, **kwargs)
             raise BadRequest(errors)
+
         return wrapper
+
     return decorated_function
 
 
@@ -26,5 +28,7 @@ def permission_required(*roles):
             if token_user.role not in approved_roles:
                 raise Forbidden("Permission denied!")
             return func(*args, **kwargs)
+
         return wrapper
+
     return decorated_function

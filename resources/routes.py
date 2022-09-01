@@ -1,4 +1,5 @@
-from resources.auth import DeleteUserResource, RegisterUserResource, LoginUserResource, CreateCheckerResource
+from resources.auth import DeleteUserResource, RegisterUserResource, LoginUserResource, CreateCheckerResource, \
+    CreateAdminResource
 
 from resources.books import AudioBooksResource, DigitalBooksResource, BooksResource, \
     RejectReadingBookResource, ApproveReadingBookResource, ReadingBooksResource, DeleteReadingBooksResource
@@ -15,7 +16,7 @@ routes = (
     (UserReadingBooksResource, "/<int:user_id>/reading_book/"),
 
     (CreateCheckerResource, "/register_checker/"),
-    (CreateAdminResource, "/register_checker/"),
+    (CreateAdminResource, "/register_admin/"),
 
     (BooksResource, "/books/"),
 

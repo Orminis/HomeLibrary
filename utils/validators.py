@@ -4,27 +4,25 @@ from werkzeug.exceptions import BadRequest, Forbidden, Locked
 
 from models import StandardUserModel, CheckerModel, AdminModel
 
-# Определяне на условия за паролите чрез password_strength
+# Using Password Policy to request strong passwords from users
 policy = PasswordPolicy.from_names(
     uppercase=2,  # need min. 1 uppercase letters
     numbers=1,  # need min. 1 digits
     special=2,  # need min. 1 special characters
     nonletters=1,  # need min. 1 non-letter characters (digits, specials, anything)
 )
-
-
-def validate_password(password):
-    errors = policy.test(password)
-    if errors:
-        raise ValidationError(f"{errors}")
-
-
 covers = {"soft": "Soft Cover", "hard": "Hard Cover"}
 
 
 def validate_format_cover(cover):
     if cover not in covers:
         raise ValidationError(f"Wrong cover!")
+
+
+def validate_password(password):
+    errors = policy.test(password)
+    if errors:
+        raise ValidationError(f"{errors}")
 
 
 def validate_isbn(isbn):

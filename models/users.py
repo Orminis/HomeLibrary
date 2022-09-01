@@ -1,6 +1,8 @@
 from sqlalchemy import func
+from db import db
 
-from models.books import *
+from models.books import users_reading_books_associations_table, users_digital_books_associations_table, \
+    users_audio_books_associations_table
 from models.enum import UserRoles
 
 
