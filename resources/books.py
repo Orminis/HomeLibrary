@@ -2,9 +2,18 @@ from flask import request
 from flask_restful import Resource
 
 from managers.auth import auth
-from managers.books import ReadingBooksManager, AudioBooksManager, DigitalBooksManager, BooksManager
+from managers.books import (
+    ReadingBooksManager,
+    AudioBooksManager,
+    DigitalBooksManager,
+    BooksManager,
+)
 from models import UserRoles
-from schemas.request.books import ReadingBookSchemaRequest, AudioBookSchemaRequest, DigitalBooksSchemaRequest
+from schemas.request.books import (
+    ReadingBookSchemaRequest,
+    AudioBookSchemaRequest,
+    DigitalBooksSchemaRequest,
+)
 from schemas.responce.books import ReadingBooksSchemaResponse
 from utils.decorators import validate_schema, permission_required
 

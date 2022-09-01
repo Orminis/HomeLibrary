@@ -1,19 +1,28 @@
 from db import db
 from models.enum import Covers, Status
 
-users_reading_books_associations_table = db.Table("users_reading_books_associations", db.Model.metadata,
+users_reading_books_associations_table = db.Table(
+    "users_reading_books_associations",
+    db.Model.metadata,
     db.Column("user_id", db.Integer, db.ForeignKey("standard_user.id")),
-    db.Column("reading_book_id", db.Integer, db.ForeignKey("reading_books.id")))
+    db.Column("reading_book_id", db.Integer, db.ForeignKey("reading_books.id")),
+)
 
 
-users_digital_books_associations_table = db.Table("users_digital_books_associations", db.Model.metadata,
+users_digital_books_associations_table = db.Table(
+    "users_digital_books_associations",
+    db.Model.metadata,
     db.Column("user_id", db.Integer, db.ForeignKey("standard_user.id")),
-    db.Column("digital_book_id", db.Integer, db.ForeignKey("digital_books.id")))
+    db.Column("digital_book_id", db.Integer, db.ForeignKey("digital_books.id")),
+)
 
 
-users_audio_books_associations_table = db.Table("users_audio_books_associations", db.Model.metadata,
+users_audio_books_associations_table = db.Table(
+    "users_audio_books_associations",
+    db.Model.metadata,
     db.Column("user_id", db.Integer, db.ForeignKey("standard_user.id")),
-    db.Column("audio_book_id", db.Integer, db.ForeignKey("audio_books.id")))
+    db.Column("audio_book_id", db.Integer, db.ForeignKey("audio_books.id")),
+)
 
 
 class BooksModel(db.Model):
@@ -37,9 +46,11 @@ class ReadingBooksModel(BooksModel):
     edition = db.Column(db.Integer, nullable=False)
     paper_format_cover = db.Column(db.Enum(Covers), nullable=True)
     # relation between standard users and reading books bidirectional
-    users = db.relationship("StandardUserModel",
-                            secondary=users_reading_books_associations_table,
-                            back_populates="reading_books")
+    users = db.relationship(
+        "StandardUserModel",
+        secondary=users_reading_books_associations_table,
+        back_populates="reading_books",
+    )
 
 
 class DigitalBooksModel(BooksModel):
@@ -49,9 +60,11 @@ class DigitalBooksModel(BooksModel):
     publish_language = db.Column(db.String(20), nullable=False)
     edition = db.Column(db.Integer, nullable=False)
     # relation between standard users and reading books bidirectional
-    users = db.relationship("StandardUserModel",
-                            secondary=users_digital_books_associations_table,
-                            back_populates="digital_books")
+    users = db.relationship(
+        "StandardUserModel",
+        secondary=users_digital_books_associations_table,
+        back_populates="digital_books",
+    )
 
 
 class AudioBooksModel(BooksModel):
@@ -59,9 +72,11 @@ class AudioBooksModel(BooksModel):
 
     reader_name = db.Column(db.String(100), nullable=False)
     # relation between standard users and reading books bidirectional
-    users = db.relationship("StandardUserModel",
-                            secondary=users_audio_books_associations_table,
-                            back_populates="audio_books")
+    users = db.relationship(
+        "StandardUserModel",
+        secondary=users_audio_books_associations_table,
+        back_populates="audio_books",
+    )
 
 
 class ReadingBooksForApprovalModel(BooksModel):

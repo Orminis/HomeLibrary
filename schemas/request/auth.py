@@ -16,7 +16,10 @@ class LoginSchemaRequest(AuthBaseSchema):
 
 class UpdateSchemaRequest(Schema):
     email = fields.Email(allow_none=True)
-    password = fields.Str(allow_none=True, validate=validate.And(validate_password, validate.Length(min=8, max=32)))
+    password = fields.Str(
+        allow_none=True,
+        validate=validate.And(validate_password, validate.Length(min=8, max=32)),
+    )
     username = fields.Str(allow_none=True, validate=validate.Length(min=3, max=50))
     first_name = fields.Str(allow_none=True, validate=validate.Length(min=3, max=35))
     last_name = fields.Str(allow_none=True, validate=validate.Length(min=3, max=35))

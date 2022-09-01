@@ -3,9 +3,20 @@ import uuid
 
 from common import TEMP_DIR
 from db import db
-from models import ReadingBooksModel, DigitalBooksModel, AudioBooksModel, ReadingBooksForApprovalModel, Status, \
-    DigitalBooksForApprovalModel, AudioBooksForApprovalModel
-from schemas.responce.books import ReadingBooksSchemaResponse, DigitalBooksSchemaResponse, AudioBooksSchemaResponse
+from models import (
+    ReadingBooksModel,
+    DigitalBooksModel,
+    AudioBooksModel,
+    ReadingBooksForApprovalModel,
+    Status,
+    DigitalBooksForApprovalModel,
+    AudioBooksForApprovalModel,
+)
+from schemas.responce.books import (
+    ReadingBooksSchemaResponse,
+    DigitalBooksSchemaResponse,
+    AudioBooksSchemaResponse,
+)
 from services.s3 import S3Service
 from utils.base import decode_file
 from utils.validators import validate_existing_isbn, validate_status_is_pending
@@ -18,9 +29,11 @@ class BooksManager:
         digital_books = DigitalBooksModel.query.all()
         audio_books = AudioBooksModel.query.all()
 
-        return ReadingBooksSchemaResponse().dump(reading_books, many=True), \
-               DigitalBooksSchemaResponse().dump(digital_books, many=True), \
-               AudioBooksSchemaResponse().dump(audio_books, many=True)
+        return (
+            ReadingBooksSchemaResponse().dump(reading_books, many=True),
+            DigitalBooksSchemaResponse().dump(digital_books, many=True),
+            AudioBooksSchemaResponse().dump(audio_books, many=True),
+        )
 
 
 # Manager for reading books and reading books for approval tables
@@ -57,11 +70,15 @@ class ReadingBooksManager:
     # change book status in approval table from pending to approve and create a new book in official table
     @staticmethod
     def approve(book_id):
-        ReadingBooksForApprovalModel.query.filter_by(id=book_id).update({"status": Status.approved})
+        ReadingBooksForApprovalModel.query.filter_by(id=book_id).update(
+            {"status": Status.approved}
+        )
         book = ReadingBooksForApprovalModel.query.filter_by(id=book_id).first()
         validate_existing_isbn(book.isbn, ReadingBooksModel)
 
-        book_dict = dict((col, getattr(book, col)) for col in book.__table__.columns.keys())
+        book_dict = dict(
+            (col, getattr(book, col)) for col in book.__table__.columns.keys()
+        )
         book_dict.pop("id")
         book_dict.pop("status")
 
@@ -74,7 +91,9 @@ class ReadingBooksManager:
     def reject(book_id):
         book = ReadingBooksForApprovalModel.query.filter_by(id=book_id).first()
         validate_status_is_pending(book.status)
-        ReadingBooksForApprovalModel.query.filter_by(id=book_id).update({"status": Status.rejected})
+        ReadingBooksForApprovalModel.query.filter_by(id=book_id).update(
+            {"status": Status.rejected}
+        )
         return 204
 
     # method to delete book by admin

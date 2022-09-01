@@ -13,16 +13,26 @@ class RegisterBookSchemaRequest(BookBaseSchema):
 
 
 class ReadingBookSchemaRequest(RegisterBookSchemaRequest):
-    original_language = fields.Str(allow_none=True, validate=validate.Length(min=2, max=20))
-    publish_language = fields.Str(required=True, validate=validate.Length(min=2, max=20))
+    original_language = fields.Str(
+        allow_none=True, validate=validate.Length(min=2, max=20)
+    )
+    publish_language = fields.Str(
+        required=True, validate=validate.Length(min=2, max=20)
+    )
     edition = fields.Int(required=True)
-    paper_format_cover = fields.Str(allow_none=True,
-                                    validate=validate.And(validate_format_cover, validate.Length(min=4, max=4)))
+    paper_format_cover = fields.Str(
+        allow_none=True,
+        validate=validate.And(validate_format_cover, validate.Length(min=4, max=4)),
+    )
 
 
 class DigitalBooksSchemaRequest(RegisterBookSchemaRequest):
-    original_language = fields.Str(allow_none=True, validate=validate.Length(min=2, max=20))
-    publish_language = fields.Str(required=True, validate=validate.Length(min=2, max=20))
+    original_language = fields.Str(
+        allow_none=True, validate=validate.Length(min=2, max=20)
+    )
+    publish_language = fields.Str(
+        required=True, validate=validate.Length(min=2, max=20)
+    )
     edition = fields.Int(required=True)
 
 

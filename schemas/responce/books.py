@@ -13,4 +13,3 @@ class DigitalBooksSchemaResponse(BookBaseSchema):
 
 class AudioBooksSchemaResponse(BookBaseSchema):
     cover_photo_url = fields.Str(required=True)
-

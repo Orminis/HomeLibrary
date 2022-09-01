@@ -10,8 +10,12 @@ class S3Service:
         secret = config("AWS_SECRET_KEY")
         self.region = config("S3_REGION")
         self.s3_bucket_name = config("S3_BUCKET_NAME")
-        self.client_s3 = boto3.client("s3", region_name=self.region, aws_access_key_id=key,
-                                      aws_secret_access_key=secret)
+        self.client_s3 = boto3.client(
+            "s3",
+            region_name=self.region,
+            aws_access_key_id=key,
+            aws_secret_access_key=secret,
+        )
 
     def upload_cover(self, path, key):
         try:

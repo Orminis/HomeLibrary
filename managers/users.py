@@ -5,10 +5,18 @@ from db import db
 from managers.auth import AuthManager, auth
 from models import ReadingBooksModel, DigitalBooksModel, AudioBooksModel
 from models.users import StandardUserModel, CheckerModel, AdminModel
-from schemas.responce.books import ReadingBooksSchemaResponse, DigitalBooksSchemaResponse, AudioBooksSchemaResponse
+from schemas.responce.books import (
+    ReadingBooksSchemaResponse,
+    DigitalBooksSchemaResponse,
+    AudioBooksSchemaResponse,
+)
 from schemas.responce.user import UserSchemaResponse
-from utils.validators import validate_existing_email, validate_existing_username, validate_login_user, \
-    validate_user_id_vs_token_id
+from utils.validators import (
+    validate_existing_email,
+    validate_existing_username,
+    validate_login_user,
+    validate_user_id_vs_token_id,
+)
 
 
 class UserManager:
@@ -18,15 +26,21 @@ class UserManager:
         # If token id is different from given id raises Forbidden
         validate_user_id_vs_token_id(token_user, user_id)
         current_user = StandardUserModel.query.filter_by(id=token_user.id).first()
-        books = ReadingBooksModel.query.join(StandardUserModel, ReadingBooksModel.users). \
-            filter(StandardUserModel.id == token_user.id)
-        digital_books = DigitalBooksModel.query.join(StandardUserModel, DigitalBooksModel.users). \
-            filter(StandardUserModel.id == token_user.id)
-        audio_books = AudioBooksModel.query.join(StandardUserModel, AudioBooksModel.users). \
-            filter(StandardUserModel.id == token_user.id)
-        return UserSchemaResponse().dump(current_user), ReadingBooksSchemaResponse().dump(books, many=True), \
-               DigitalBooksSchemaResponse().dump(digital_books, many=True), \
-               AudioBooksSchemaResponse().dump(audio_books, many=True)
+        books = ReadingBooksModel.query.join(
+            StandardUserModel, ReadingBooksModel.users
+        ).filter(StandardUserModel.id == token_user.id)
+        digital_books = DigitalBooksModel.query.join(
+            StandardUserModel, DigitalBooksModel.users
+        ).filter(StandardUserModel.id == token_user.id)
+        audio_books = AudioBooksModel.query.join(
+            StandardUserModel, AudioBooksModel.users
+        ).filter(StandardUserModel.id == token_user.id)
+        return (
+            UserSchemaResponse().dump(current_user),
+            ReadingBooksSchemaResponse().dump(books, many=True),
+            DigitalBooksSchemaResponse().dump(digital_books, many=True),
+            AudioBooksSchemaResponse().dump(audio_books, many=True),
+        )
 
     @staticmethod
     def register(register_data):
@@ -53,7 +67,9 @@ class UserManager:
     def update(data, token_user, user_id):
         # If token id is different from given id raises Forbidden
         validate_user_id_vs_token_id(token_user, user_id)
-        upd_user = StandardUserModel.query.filter(StandardUserModel.id == user_id).first()
+        upd_user = StandardUserModel.query.filter(
+            StandardUserModel.id == user_id
+        ).first()
         cred_dict = {}
         for credentials, values in data.items():
             if credentials == "email":
@@ -81,8 +97,9 @@ class UserManager:
     # returns user's collection of reading books
     @staticmethod
     def get_reading_books(user):
-        books = ReadingBooksModel.query.join(StandardUserModel, ReadingBooksModel.users). \
-            filter(StandardUserModel.id == user.id)
+        books = ReadingBooksModel.query.join(
+            StandardUserModel, ReadingBooksModel.users
+        ).filter(StandardUserModel.id == user.id)
         return ReadingBooksSchemaResponse().dump(books, many=True)
 
     # Add reading book to user's collection

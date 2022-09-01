@@ -1,8 +1,11 @@
 from sqlalchemy import func
-from db import db
 
-from models.books import users_reading_books_associations_table, users_digital_books_associations_table, \
-    users_audio_books_associations_table
+from db import db
+from models.books import (
+    users_reading_books_associations_table,
+    users_digital_books_associations_table,
+    users_audio_books_associations_table,
+)
 from models.enum import UserRoles
 
 
@@ -25,17 +28,23 @@ class StandardUserModel(BasicUserModel):
     role = db.Column(db.Enum(UserRoles), default=UserRoles.user, nullable=False)
 
     # relation between standard users and reading books bidirectional
-    reading_books = db.relationship("ReadingBooksModel",
-                                    secondary=users_reading_books_associations_table,
-                                    back_populates="users")
+    reading_books = db.relationship(
+        "ReadingBooksModel",
+        secondary=users_reading_books_associations_table,
+        back_populates="users",
+    )
     # relation between standard users and digital books bidirectional
-    digital_books = db.relationship("DigitalBooksModel",
-                                    secondary=users_digital_books_associations_table,
-                                    back_populates="users")
+    digital_books = db.relationship(
+        "DigitalBooksModel",
+        secondary=users_digital_books_associations_table,
+        back_populates="users",
+    )
     # relation between standard users and digital books bidirectional
-    audio_books = db.relationship("AudioBooksModel",
-                                  secondary=users_audio_books_associations_table,
-                                  back_populates="users")
+    audio_books = db.relationship(
+        "AudioBooksModel",
+        secondary=users_audio_books_associations_table,
+        back_populates="users",
+    )
 
 
 # Class for users who check new additions or editions of books in the system
