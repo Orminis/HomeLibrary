@@ -16,7 +16,7 @@ routes = (
 
     (BooksResource, "/books/"),
 
-    (ReadingBooksResource, "/reading_books"),
+    (ReadingBooksResource, "/reading_book/"),
     (ApproveReadingBookResource, "/reading_book/<int:id>/approve/"),
     (RejectReadingBookResource, "/reading_book/<int:id>/reject/"),
     (DeleteReadingBooksResource, "/<int:book_id>/delete/"),

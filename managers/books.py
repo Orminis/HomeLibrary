@@ -3,12 +3,11 @@ import uuid
 
 from common import TEMP_DIR
 from db import db
-from managers.auth import auth
 from models import ReadingBooksModel, DigitalBooksModel, AudioBooksModel, ReadingBooksForApprovalModel, Status, \
     DigitalBooksForApprovalModel, AudioBooksForApprovalModel, UserRoles
 from schemas.responce.books import ReadingBooksSchemaResponse, DigitalBooksSchemaResponse, AudioBooksSchemaResponse
+from services.s3 import S3Service
 from utils.base import decode_file
-from utils.decorators import permission_required
 from utils.validators import validate_existing_isbn, validate_status_is_pending
 
 
@@ -35,19 +34,17 @@ class ReadingBooksManager:
     # creates a book and put it in approval table for check by checker or admin
     @staticmethod
     def create(book_data):
-        # todo Upload photo to s3
-        # convert base64 to file
-        # save to the server
-        # upload to s3
-        # delete file from the server
-        # data["photo_url"] = add the valie of s3 bucket url
-        file_name = f"{str(uuid.uuid4())}.{book_data['extension']}"
+        extension = book_data.pop("extension")
+        cover_photo = book_data.pop("cover_photo_url")
+        file_name = f"{str(uuid.uuid4())}.{extension}"
         path = os.path.join(TEMP_DIR, file_name)
+        decode_file(path, cover_photo)
+        s3 = S3Service()
+        cover_photo_url = s3.upload_cover(path, file_name)
 
-        decode_file(path, book_data["cover"])
-
-
+        book_data["cover_photo_url"] = cover_photo_url
         book = ReadingBooksForApprovalModel(**book_data)
+        os.remove(path)
 
         # check for the isbn in the tables. If ISBN exists in the DB raises BadRequest
         validate_existing_isbn(book_data["isbn"], ReadingBooksModel)

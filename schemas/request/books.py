@@ -8,7 +8,7 @@ class RegisterBookSchemaRequest(BookBaseSchema):
     genre = fields.Str(required=True, validate=validate.Length(min=2, max=20))
     description = fields.Raw(required=True)
     comments = fields.Raw(allow_none=True)
-    cover_photo = fields.Str(required=True)
+    cover_photo_url = fields.Str(required=True)
     extension = fields.Str(required=True)
 
 

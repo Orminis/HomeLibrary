@@ -37,7 +37,7 @@ class UpdateUserResource(Resource):
 class UserReadingBooksResource(Resource):
     @auth.login_required
     @permission_required(UserRoles.user)
-    def get(self):
+    def get(self, user_id):
         token_user = auth.current_user()
         books = UserManager.get_reading_books(token_user)
         return ReadingBooksSchemaResponse().dump(books, many=True), 200
