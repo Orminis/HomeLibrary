@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from db import db
 from managers.auth import AuthManager, auth
 from models import ReadingBooksModel, DigitalBooksModel, AudioBooksModel
-from models.users import StandardUserModel
+from models.users import StandardUserModel, CheckerModel, AdminModel
 from schemas.responce.books import ReadingBooksSchemaResponse, DigitalBooksSchemaResponse, AudioBooksSchemaResponse
 from schemas.responce.user import UserSchemaResponse
 from utils.validators import validate_existing_email, validate_existing_username, validate_login_user, \
@@ -102,3 +102,25 @@ class UserManager:
         book = ReadingBooksModel.query.filter_by(id=book_id).first()
         user.reading_books.remove(book)
         return ...
+
+    # creating checker by admin
+    @staticmethod
+    def register_checker(register_data):
+        validate_existing_email(register_data["email"])
+        validate_existing_username(register_data["username"])
+        register_data["password"] = generate_password_hash(register_data["password"])
+        checker = CheckerModel(**register_data)
+        db.session.add(checker)
+        db.session.flush()
+        return checker
+
+    # creating admin by other admin
+    @staticmethod
+    def register_admin(register_data):
+        validate_existing_email(register_data["email"])
+        validate_existing_username(register_data["username"])
+        register_data["password"] = generate_password_hash(register_data["password"])
+        admin = AdminModel(**register_data)
+        db.session.add(admin)
+        db.session.flush()
+        return admin

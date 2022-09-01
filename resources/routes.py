@@ -1,4 +1,4 @@
-from resources.auth import DeleteUserResource, RegisterUserResource, LoginUserResource
+from resources.auth import DeleteUserResource, RegisterUserResource, LoginUserResource, CreateCheckerResource
 
 from resources.books import AudioBooksResource, DigitalBooksResource, BooksResource, \
     RejectReadingBookResource, ApproveReadingBookResource, ReadingBooksResource, DeleteReadingBooksResource
@@ -13,6 +13,9 @@ routes = (
     (UpdateUserResource, "/<int:user_id>/update_user/"),
     (DeleteUserResource, "/<int:user_id>/delete_user/"),
     (UserReadingBooksResource, "/<int:user_id>/reading_book/"),
+
+    (CreateCheckerResource, "/register_checker/"),
+    (CreateAdminResource, "/register_checker/"),
 
     (BooksResource, "/books/"),
 

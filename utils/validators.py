@@ -48,13 +48,25 @@ def validate_name(name):
 
 # Check if email or username exists in StandardUserModel
 def validate_existing_email(email):
-    if StandardUserModel.query.filter_by(email=email).first():
-        raise BadRequest("Credentials already in use!")
+    existing_email = StandardUserModel.query.filter_by(email=email).first()
+    if not existing_email:
+        existing_email = CheckerModel.query.filter_by(email=email).first()
+        if not existing_email:
+            existing_email = AdminModel.query.filter_by(email=email).first()
+            if not existing_email:
+                return None
+    raise BadRequest("Credentials already in use!")
 
 
 def validate_existing_username(username):
-    if StandardUserModel.query.filter_by(username=username).first():
-        raise BadRequest("Credentials already in use!")
+    existing_username = StandardUserModel.query.filter_by(username=username).first()
+    if not existing_username:
+        existing_username = CheckerModel.query.filter_by(username=username).first()
+        if not existing_username:
+            existing_username = AdminModel.query.filter_by(username=username).first()
+            if not existing_username:
+                return None
+    raise BadRequest("Credentials already in use!")
 
 
 def validate_login_user(login_data):
